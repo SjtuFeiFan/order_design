@@ -212,6 +212,8 @@ if __name__ == "__main__":
     N2 = order_data1_tesla.index.tolist()
     N2 = sorted(N2, key=lambda i: w[i], reverse=True)
 
+    N_used = []
+
     gtotal = 0
     pre = N1[0]
     node_full = []
@@ -224,6 +226,7 @@ if __name__ == "__main__":
 
         order_data1_tesla_tmp = order_data1[(order_data1['FIN_USER_NAME']=='特斯拉(上海)有限公司') & (order_data1['材料实际宽度']<=pre_w) & (order_data1['材料实际宽度']>=lat_w)]
         N = order_data1_tesla_tmp.index.tolist()
+        N = list(set(N) - set(N_used))
         N.append(pre_idx)
         N.append(lat_idx)
 
@@ -234,6 +237,8 @@ if __name__ == "__main__":
         for (i,j) in x: 
             if (model.getVal(x[i,j]) > 0.5):
                 edges.append((i,j))
+                if (i != pre_idx) or (i != lat_idx):
+                    N_used.append(i)
         
 
         objective_value = model.getObjVal()
